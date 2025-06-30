@@ -1,98 +1,74 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Trabalho III
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+DATA DE ENTREGA: 01/JULHO/2025
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Desenvolvimento de Sistema de Controle de Acesso com Módulos Fixos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Objetivo:**  
+Implementar uma API com **NestJS**, **Prisma** e **SQLite** para gerenciar permissões de acesso a módulos fixos. Este trabalho visa desenvolver as regras de negócio, estrutura de banco de dados e funcionalidades de backend, **não sendo foco o desenvolvimento de frontend.** O sistema deve contemplar controle de acesso, permissões personalizadas, criação de usuários, criptografia de senhas, uploads de imagens e listagem de dados.
 
-## Project setup
+---
 
-```bash
-$ yarn install
-```
+#### **Requisitos do Sistema:**
 
-## Compile and run the project
+1. **Módulos Fixos e Acesso:**
+   - O sistema deve conter **quatro módulos fixos**:
+     - **Gestão de Usuários**: Acessível apenas por administradores e superusuário.
+     - **Módulo de Perfil**: Todos os usuários podem acessar seu próprio perfil. O módulo de perfil deve permitir a edição de seus dados.
+     - **Módulo Financeiro**: Acessível por superusuário, administradores e usuários com permissão explícita.
+     - **Módulo de Relatórios**: Acessível por superusuário, administradores e usuários com permissão explícita.
+     - **Módulo de Produtos**: Acessível por superusuário, administradores e usuários com permissão explícita.
 
-```bash
-# development
-$ yarn run start
+   - O acesso aos módulos deve ser controlado pelo backend:
+     - Usuários sem permissão devem ser redirecionados para uma página de erro: **"SEM PERMISSÃO PARA ACESSAR O MÓDULO X"**.
 
-# watch mode
-$ yarn run start:dev
 
-# production mode
-$ yarn run start:prod
-```
+2. **Controle de Usuários e Permissões:**
+   - Deve existir um **superusuário** gerado automaticamente (hardcoded) ao iniciar a aplicação (caso ainda não exista).
+     - O superusuário pode criar outros usuários e administradores.
+   - Administradores podem:
+     - Criar novos usuários (não administradores).
+     - Configurar permissões de acesso aos módulos para outros usuários.
+   - Usuários comuns podem acessar apenas os módulos para os quais possuem permissão explícita.
+   - Um usuário pode ter acesso a múltiplos módulos.
 
-## Run tests
+   - Todas as rotas acessadas por um usuário logado devem ser salvas no banco, indicando se o acesso foi concedido ou negado.
 
-```bash
-# unit tests
-$ yarn run test
 
-# e2e tests
-$ yarn run test:e2e
+3. **Banco de Dados:**
+   - Os alunos devem propor a **estrutura do banco de dados** para gerenciar:
+     - Usuários, papéis (superusuário, administrador, usuário comum).
+     - Módulos e permissões de acesso.
+   
+   - Utilizar o ORM **Prisma** para modelar e gerenciar o banco de dados.
 
-# test coverage
-$ yarn run test:cov
-```
+4. **Funcionalidades Específicas:**
+   - **Autenticação e Criptografia de Senhas:**
+     - Implementar login com autenticação de usuários.
+     - Utilizar criptografia (ex.: bcrypt) para armazenar senhas.
+   
+   - **Gestão de Permissões:**
+     - Criar endpoints para configurar quais usuários têm acesso a quais módulos.
+     - Implementar middleware para verificar permissões antes de acessar os módulos. Consultem o banco em tempo real.
 
-## Deployment
+5. **Regras de Negócio:**
+   - Os retornos dos módulos devem incluir informações sobre o acesso concedido ou negado.
+   - Caso o usuário não tenha permissão para acessar um módulo, ele deve ser redirecionado para a página de erro correspondente.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **Tecnologias Obrigatórias:**
+  - **NestJS** para o desenvolvimento do backend.
+  - **Prisma** para o gerenciamento do banco de dados.
+  - **SQLite** como banco de dados local.
 
-```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Entrega e Avaliação:**
+  - O código deve ser bem documentado, explicando as regras de negócio implementadas.
+  - A estrutura do banco de dados e o fluxo de permissões serão avaliados.
+  - Arquitetura padrão do NESTJS
+        - Autenticacao
+        - Usuarios
+        - Financeiro
+        - Relatorio
+        - Produtos
