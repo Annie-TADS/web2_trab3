@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Users {
+  id            Int                  @id @default(autoincrement())
+  username      String   
+  password      String
+  admin         Boolean              @default(false)
+  superUser     Boolean              @default(false)
+  
+  permissions   UsersPermissions[]   @relation("UsersPermissions")
+  endpointAccesses   EndpointAccesses[]   @relation("UsersEndpointAccesses")
+}
+
+model Permissions {
+  id            Int                  @id @default(autoincrement())
+  moduleName    String               @unique
+
+  users         UsersPermissions[]   @relation("UsersPermissions")
+}
+
+model UsersPermissions {
+  id            Int                  @id @default(autoincrement())
+
+  userId        Int
+  permissionId  Int
+  
+  user          Users                @relation("UsersPermissions", fields: [userId], references: [id])
+  permissions   Permissions          @relation("UsersPermissions", fields: [permissionId], references: [id])
+}
+
+model EndpointAccesses {
+  id            Int                  @id @default(autoincrement())
+  endpoint      String
+  method        String
+  approved      Boolean
+  dateTime      DateTime             @default(now())
+
+  userId        Int
+
+  user          Users                @relation("UsersEndpointAccesses", fields: [userId], references: [id])
+}
+
+model Financas {
+  id         Int      @id @default(autoincrement())
+  descricao  String
+  valor      Float
+  data       DateTime @default(now())
+}
+
+model Produtos {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  preco       Float
+  estoque     Int
+  imagemUrl   String?
+  criadoEm    DateTime @default(now())
+}

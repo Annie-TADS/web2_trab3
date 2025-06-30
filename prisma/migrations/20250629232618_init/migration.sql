@@ -1,0 +1,21 @@
+-- CreateTable
+CREATE TABLE "Users" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Roles" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "moduleName" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "UsersRoles" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "userId" INTEGER NOT NULL,
+    "roleId" INTEGER NOT NULL,
+    CONSTRAINT "UsersRoles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "UsersRoles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

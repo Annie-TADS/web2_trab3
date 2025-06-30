@@ -1,0 +1,17 @@
+-- CreateTable
+CREATE TABLE "Financa" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "descricao" TEXT NOT NULL,
+    "valor" REAL NOT NULL,
+    "data" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "Produto" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "nome" TEXT NOT NULL,
+    "preco" REAL NOT NULL,
+    "estoque" INTEGER NOT NULL,
+    "imagemUrl" TEXT NOT NULL,
+    "criadoEm" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
