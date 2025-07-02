@@ -4,6 +4,7 @@ import {
   UnauthorizedException,
   HttpStatus,
   Injectable,
+  Catch,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { EndpointAccessesService } from 'src/endpoint-accesses/endpoint-accesses.service';
@@ -20,29 +21,31 @@ export class UnauthorizedExceptionFilter implements ExceptionFilter {
     const res = context.getResponse<Response>();
 
     const moduleName = req.moduleName
-    const user = req.user;
-    const userId = user ? user.id : null;
+    if (exception.message.toUpperCase() == 'FORBIDDEN RESOURCE' && moduleName) {
+      const user = req.user;
+      const userId = user ? user.id : null;
 
-    if (userId) {
-      this.endpointAccessesService.create({
-        userId,
-        endpoint: req.path,
-        method: req.method,
-        approved: false,
+      if (userId) {
+        this.endpointAccessesService.create({
+          userId,
+          endpoint: req.path,
+          method: req.method,
+          approved: false,
+        });
+      }
+      
+      const status = exception.getStatus
+        ? exception.getStatus()
+        : HttpStatus.FORBIDDEN;
+
+      const message = `SEM PERMISSÃO PARA ACESSAR O MÓDULO ${moduleName}`;
+
+      res.status(status).json({
+        statusCode: status,
+        message,
       });
+    } else {
+      console.error(exception)
     }
-
-    console.log(exception)
-
-    const status = exception.getStatus
-      ? exception.getStatus()
-      : HttpStatus.FORBIDDEN;
-
-    const message = `SEM PERMISSÃO PARA ACESSAR O MÓDULO ${moduleName}`;
-
-    res.status(status).json({
-      statusCode: status,
-      message,
-    });
   }
 }

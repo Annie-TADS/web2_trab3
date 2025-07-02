@@ -24,6 +24,10 @@ export class ProdutosService {
     }
 
     update(id: number, updateProdutoDto: UpdateProdutoDto) {
+        if (!this.findById(id)) {
+            return null;
+        }
+
         return this.prisma.produtos.update({
             where: { id },
             data: updateProdutoDto
@@ -31,6 +35,10 @@ export class ProdutosService {
     }
 
     remove(id: number) {
+        if (!this.findById(id)) {
+            return null;
+        }
+        
         return this.prisma.produtos.delete({
             where: { id }
         });

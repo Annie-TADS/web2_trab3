@@ -6,11 +6,11 @@ export class RelatoriosService {
     constructor(private readonly prisma: PrismaService) { }
 
     async totalFinancas() {
-        return this.prisma.financas.aggregate({
+        return (await this.prisma.financas.aggregate({
             _sum: {
                 valor: true,
             },
-        });
+        }))._sum;
     }
 
     async estoqueProdutos() {

@@ -24,6 +24,10 @@ export class FinancasService {
     }
 
     update(id: number, updateFinancaDto: UpdateFinancaDto) {
+        if (!this.findById(id)) {
+            return null;
+        }
+        
         return this.prisma.financas.update({
             where: { id },
             data: updateFinancaDto
@@ -31,6 +35,10 @@ export class FinancasService {
     }
 
     remove(id: number) {
+        if (!this.findById(id)) {
+            return null;
+        }
+        
         return this.prisma.financas.delete({
             where: { id }
         });

@@ -25,6 +25,10 @@ export class PermissionsService {
     }
 
     remove(id: number) {
+        if (!this.findById(id)) {
+            return null;
+        }
+        
         return this.prisma.permissions.delete({
             where: { id }
         });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { UsersService } from 'src/users/users.service';
@@ -12,6 +12,11 @@ export class AuthService {
     ) {}
     
     async login(loginDto: LoginDto) {
+        console.log({loginDto})
+        if (!loginDto || !loginDto.username || !loginDto.password) {
+            throw new BadRequestException('')
+        }
+        
         const user = await this.validateUser(loginDto.username, loginDto.password);
 
         if (!user) {
@@ -23,6 +28,7 @@ export class AuthService {
 
     private async validateUser(username: string, password: string) {
         const user = await this.usersService.findByUsername(username, true);
+        console.log({user})
         if (user && await bcrypt.compare(password, user.password)) {
             return user;
         }

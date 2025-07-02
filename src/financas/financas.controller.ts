@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ModuleName } from 'src/guards/module-name.decorator';
 import { FinancasService } from './financas.service';
 import { PermissionGuard } from 'src/guards/permission.guard';
@@ -13,7 +13,7 @@ export class FinancasController {
 
     @Post()
     @UseGuards(AuthGuard, PermissionGuard)
-    create(@Body() createFinancaDto: CreateFinancaDto) {
+    create(@Body(new ValidationPipe({ whitelist: true })) createFinancaDto: CreateFinancaDto) {
         return this.financasService.create(createFinancaDto);
     }
 

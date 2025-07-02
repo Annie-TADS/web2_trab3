@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { UsersPermissionsService } from "src/users-permissions/users-permissions.service";
 
@@ -24,7 +24,7 @@ export class PermissionGuard implements CanActivate {
     const user = request.user;
 
     if (!user) {
-      return false;
+      throw new UnauthorizedException();
     }
 
     if (user.admin || user.superUser) {

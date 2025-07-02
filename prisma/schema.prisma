@@ -20,6 +20,7 @@ model Users {
   password      String
   admin         Boolean              @default(false)
   superUser     Boolean              @default(false)
+  active        Boolean              @default(true)
   
   permissions   UsersPermissions[]   @relation("UsersPermissions")
   endpointAccesses   EndpointAccesses[]   @relation("UsersEndpointAccesses")

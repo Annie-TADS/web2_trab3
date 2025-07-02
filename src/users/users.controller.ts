@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PermissionGuard } from 'src/guards/permission.guard';
@@ -18,7 +18,7 @@ export class UsersController {
     @Post()
     @UseGuards(AuthGuard, RoleGuard)
     @Roles(RolesUser.SUPERUSER, RolesUser.ADMIN)
-    create(@Body() createUserDto: CreateUserDto) {
+    create(@Body(new ValidationPipe({ whitelist: true })) createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
     }
 

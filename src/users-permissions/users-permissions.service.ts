@@ -20,12 +20,15 @@ export class UsersPermissionsService {
                 userId
             },
             select: {
+                id: true,
+                user: true,
                 permissions: true
             }
         });
     }
 
     remove(id: number) {
+        console.log(id)
         return this.prisma.usersPermissions.delete({
             where: { id }
         });

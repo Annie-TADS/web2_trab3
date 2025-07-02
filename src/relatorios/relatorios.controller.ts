@@ -15,7 +15,7 @@ export class RelatoriosController {
         return this.relatoriosService.totalFinancas();
     }
 
-    @Get('produtos/estoque')
+    @Get('produtos/estoque')    
     @UseGuards(AuthGuard, PermissionGuard)
     async getEstoqueProdutos() {
         return this.relatoriosService.estoqueProdutos();

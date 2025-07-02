@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ModuleName } from 'src/guards/module-name.decorator';
 import { ProdutosService } from './produtos.service';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -16,7 +16,7 @@ export class ProdutosController {
     @UseGuards(AuthGuard, PermissionGuard)
     @FileUpload()
     async create(
-        @Body() createProdutoDto: CreateProdutoDto,
+        @Body(new ValidationPipe({ whitelist: true })) createProdutoDto: CreateProdutoDto,
         @UploadedFile() file: Express.Multer.File,
     ) {
         const imagemUrl = file?.path;

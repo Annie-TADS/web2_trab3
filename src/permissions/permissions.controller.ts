@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { ModuleName } from 'src/guards/module-name.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -15,7 +15,7 @@ export class PermissionsController {
     @Post()
     @UseGuards(AuthGuard, RoleGuard)
     @Roles(RolesUser.SUPERUSER, RolesUser.ADMIN)
-    create(@Body() createPermissionDto: CreatePermissionDto) {
+    create(@Body(new ValidationPipe({ whitelist: true })) createPermissionDto: CreatePermissionDto) {
         return this.permissionsService.create(createPermissionDto);
     }
 
